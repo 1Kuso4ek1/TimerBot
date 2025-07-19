@@ -7,7 +7,14 @@ public:
     explicit BotUI(TgBot::Bot& bot) : bot(bot) {}
 
     void sendStartMessage(int64_t chatId) const;
-    void sendMarkdownMessage(int64_t chatId, const std::string& message) const;
+    int32_t sendTimerStarted(int64_t chatId, const std::string& time) const;
+    void sendReminder(int64_t chatId, int minutes) const;
+    void sendTimerEnded(int64_t chatId) const;
+    void sendKillerModeActivated(int64_t chatId) const;
+    void sendKillerModeDeactivated(int64_t chatId) const;
+    void sendUserKilled(int64_t chatId, const std::string& fullName) const;
+
+    void editTimer(int64_t chatId, int32_t messageId, const std::string& time) const;
 
 private:
     void setupReplyKeyboards();

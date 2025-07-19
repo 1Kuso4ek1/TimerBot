@@ -1,18 +1,20 @@
 #include "core/Application.hpp"
 #include "core/Constants.hpp"
 
-#include "handlers/EchoHandler.hpp"
+#include "handlers/KillHandler.hpp"
 #include "handlers/StartHandler.hpp"
+#include "handlers/TimeHandler.hpp"
 
 #include <print>
 
 Application::Application()
     : bot(Env::token, httpClient),
-      longPoll(bot, 1, 30),
+      longPoll(bot),
       ui(bot)
 {
     startHandler = std::make_unique<StartHandler>(ui);
-    echoHandler = std::make_unique<EchoHandler>(ui);
+    timeHandler = std::make_unique<TimeHandler>(bot, ui);
+    killHandler = std::make_unique<KillHandler>(bot, ui);
 
     setupCommands();
     setupCallbackQueries();
@@ -38,10 +40,10 @@ void Application::run()
 
 void Application::handleAny(const TgBot::Message::Ptr& message) const
 {
-    if(message->text.front() == '/')
+    if(!message->text.empty() && message->text.front() == '/')
         return;
 
-    echoHandler->handle(message);
+    killHandler->handle(message);
 }
 
 void Application::setupCommands()

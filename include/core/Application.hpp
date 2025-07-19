@@ -33,12 +33,15 @@ private: // Class members
 
     BotUI ui;
 
-    std::unique_ptr<HandlerBase> startHandler, echoHandler;
+    std::unique_ptr<HandlerBase> startHandler, timeHandler, killHandler;
 
 private: // Mapping callbacks
     std::unordered_map<std::string, TgBot::EventBroadcaster::MessageListener> commands =
     {
-        { "start", [&](const auto& message) { startHandler->handle(message); } }
+        { "start", [&](const auto& message) { startHandler->handle(message); } },
+        { "time", [&](const auto& message) { timeHandler->handle(message); } },
+        { "kill", [&](const auto& message) { killHandler->handle(message); } },
+        { "nokill", [&](const auto& message) { killHandler->handle(message); } }
     };
 
     std::unordered_map<std::string, TgBot::EventBroadcaster::CallbackQueryListener> callbacks{};
